@@ -48,5 +48,5 @@ for filename in os.listdir('./cogs'):
 
 
 
-
-client.run('NjA2ODgwMTc1NDY0MTIwMzI5.XURfNQ.CzTm9oGtDwCUAhUx2YwHJwycYc8')
+f = open("token.txt", "r")
+client.run(f.readline())
