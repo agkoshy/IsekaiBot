@@ -25,49 +25,57 @@ class Dungeon(commands.Cog):
         y = x.strftime('%Y-%m-%d %H:%M:%S')
         print(y)
         cur = conn.cursor()
-        cur.execute("select adv from Player where discord_id = %s;", (ctx.message.author.id,))
+        cur.execute("select count(*) from Player where discord_id = %s;", (ctx.message.author.id,))
         rows = cur.fetchall()
-        adv = 0
+        player_exist = True
         for r in rows:
-            print(r[0])
-            if r[0] is None:
-                cur.execute("update Player set adv = %s where adv is NULL and discord_id = %s", (y, ctx.message.author.id))
-                adv = y
-                break
-            else:
-                adv = r[0]
-        z = datetime.datetime.now()
-        now = z.strftime('%Y-%m-%d %H:%M:%S')
-        print("Before strptime %s", adv)
-        if type(adv) == str:            
-            adv = datetime.datetime.strptime(adv, '%Y-%m-%d %H:%M:%S')       
-        now = datetime.datetime.strptime(now, '%Y-%m-%d %H:%M:%S')
-        if (now > adv):
-            #Makes their adventure status as NULL            
-            cur.execute("update Player set adv = NULL where discord_id = %s", (ctx.message.author.id,))
-            cur.execute("select p_exp, lvl from Player where discord_id = %s;", (ctx.message.author.id,))
+            if r[0] == 0:
+                player_exist = False
+        if player_exist == True:
+            cur.execute("select adv from Player where discord_id = %s;", (ctx.message.author.id,))
             rows = cur.fetchall()
+            adv = 0
             for r in rows:
-                exp = r[0]
-                lvl = r[1]
-            exp = exp + 30
-            cur.execute("update Player set p_exp = %s where discord_id = %s", (exp, ctx.message.author.id))
-            cur.execute("select ex from Lvl where lvl = %s;", (lvl,))
-            rows = cur.fetchall()
-            for r in rows:
-                exp_req = r[0]
-            if exp < exp_req:
-                await ctx.send("You have completed the dungeon! You gained 30 exp!")
+                print(r[0])
+                if r[0] is None:
+                    cur.execute("update Player set adv = %s where adv is NULL and discord_id = %s", (y, ctx.message.author.id))
+                    adv = y
+                    break
+                else:
+                    adv = r[0]
+            z = datetime.datetime.now()
+            now = z.strftime('%Y-%m-%d %H:%M:%S')
+            print("Before strptime %s", adv)
+            if type(adv) == str:            
+                adv = datetime.datetime.strptime(adv, '%Y-%m-%d %H:%M:%S')       
+            now = datetime.datetime.strptime(now, '%Y-%m-%d %H:%M:%S')
+            if (now > adv):
+                #Makes their adventure status as NULL            
+                cur.execute("update Player set adv = NULL where discord_id = %s", (ctx.message.author.id,))
+                cur.execute("select p_exp, lvl from Player where discord_id = %s;", (ctx.message.author.id,))
+                rows = cur.fetchall()
+                for r in rows:
+                    exp = r[0]
+                    lvl = r[1]
+                exp = exp + 30
+                cur.execute("update Player set p_exp = %s where discord_id = %s", (exp, ctx.message.author.id))
+                cur.execute("select ex from Lvl where lvl = %s;", (lvl,))
+                rows = cur.fetchall()
+                for r in rows:
+                    exp_req = r[0]
+                if exp < exp_req:
+                    await ctx.send("You have completed the dungeon! You gained 30 exp!")
+                else:
+                    cur.execute("update Player set lvl = %s where discord_id = %s", (lvl + 1, ctx.message.author.id))
+                    await ctx.send("You have completed the dungeon! You gained 30 exp! You have leveled up!")
             else:
-                cur.execute("update Player set lvl = %s where discord_id = %s", (lvl + 1, ctx.message.author.id))
-                await ctx.send("You have completed the dungeon! You gained 30 exp! You have leveled up!")
+                duration = adv - now 
+                print(adv)
+                print(now)
+                print(duration)
+                await ctx.send(f"You have {duration} remaining to complete the dungeon")
         else:
-            duration = adv - now 
-            print(adv)
-            print(now)
-            print(duration)
-            await ctx.send(f"You have {duration} remaining to complete the dungeon")
-
+            await ctx.send("Sir you haven't !isekai yet")
         cur.close()
         conn.commit()
         conn.close()   
