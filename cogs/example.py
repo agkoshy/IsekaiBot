@@ -11,8 +11,12 @@ class Example(commands.Cog):
         print('Example.py is ready')
     
     @commands.command()
-    async def h1(self, ctx):
+    async def humza1(self, ctx):
         await ctx.send('Humza is haram')
+        a = 32
+        b = 15
+        c = a/b
+        print(int(c))
 
 
 def setup(client):
