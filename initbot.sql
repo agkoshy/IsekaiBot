@@ -156,4 +156,5 @@ insert into Gacha(gacha_id, unit, descr, rarity, unit_url, anime) values
     (38, 'Aldarp Alex Barnes', 'Sample Description here', 'R','https://www.anime-planet.com/images/characters/thumbs/aldarp-alex-barnes-119837.jpg?t=1484409379','Kono Subarashii Sekai ni Shukufuku wo! 2'),
     (39, 'Yunyun', 'Sample Description here', 'SSR','https://www.anime-planet.com/images/characters/thumbs/yunyun-72080.jpg?t=1466909539','Kono Subarashii Sekai ni Shukufuku wo! 2'),
     (40, 'Wagon Driver', 'Sample Description here', 'N', 'https://www.anime-planet.com/images/characters/thumbs/wagon-driver-121621.jpg?t=1488737842', 'Kono Subarashii Sekai ni Shukufuku wo! 2'),
-    (41, 'Kazuma', 'Sample Description here', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/kazuma-satou-72069.jpg?t=1453327584', 'Kono Subarashii Sekai ni Shukufuku wo!');
+    (41, 'Kazuma', 'Sample Description here', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/kazuma-satou-72069.jpg?t=1453327584', 'Kono Subarashii Sekai ni Shukufuku wo!')
+    (42, 'Mordred', 'Sample Description here', 'UR', 'https://i.imgur.com/s8Cn7QH.png', 'Fate/Apocrypha');

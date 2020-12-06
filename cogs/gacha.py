@@ -20,16 +20,14 @@ class Gacha(commands.Cog):
         cur = conn.cursor()
         args = str(args).lower()
         sql = """select count(*) from (select lower(unit) as unit from Gacha) as G where unit like %s;"""
-        search = f'{args}%'
+        search = f'{args}'
         cur.execute(sql, (search,))
         print(cur.mogrify(sql, (search,)))
-        rows = cur.fetchall()
-        for r in rows:
-            count = r[0]
-        if count == 0:
-            await ctx.send("There exists no such unit currently")
-        elif count == 1:
-            #query checks to see the unit in lowercase returning the unit and id (Should only be 1)
+        rows = cur.fetchone()
+        if rows[0] == 0:
+            exact_match = False
+        elif rows[0] == 1:
+            exact_match = True
             sql = """select gunit, gacha_id from (select lower(unit) as gunit, gacha_id from Gacha) as A where gunit like %s;"""
             cur.execute(sql, (search,))
             rows= cur.fetchall()
@@ -69,26 +67,77 @@ class Gacha(commands.Cog):
             embed.set_image(url=f"{g_url}")
             embed.add_field(name=f"{g_unit}", value=f"Rarity: {self.client.get_emoji(g_rarity)}\nAnime: {g_anime}")
             await ctx.message.channel.send(embed=embed)
-        else:
-            embed = discord.Embed()
-            sql = """select gunit, gacha_id from (select lower(unit) as gunit, gacha_id from Gacha) as A where gunit like %s;"""
+        if exact_match == False:
+            sql = """select count(*) from (select lower(unit) as unit from Gacha) as G where unit like %s;"""
+            search = f'{args}%'
             cur.execute(sql, (search,))
-            rows= cur.fetchall()
-            nums = []
-            search_display = ""
+            print(cur.mogrify(sql, (search,)))
+            rows = cur.fetchall()
             for r in rows:
-                nums.append(r[1])
-            for i in nums:
-                cur.execute("select unit, rarity_id, unit_url, anime from Gacha where gacha_id = %s;", (i,))
-                rows = cur.fetchone()
-                search_display += f"**{rows[0]}** - {rows[3]}\n"
-            # sql = """select unit, rarity_id, unit_url, anime from Gacha where unit like %s;"""
-            # cur.execute(sql, (search,))
-            # #cur.execute("select gunit, rarity_id, unit_url, anime from (select lower(unit) as gunit from Gacha) as A, Gacha where unit like %s%%;", (args,))
-            # rows=cur.fetchall()
-            print(f"Search: {search_display}")
-            embed.add_field(name=f"** **", value=f"{search_display}")
-            await ctx.message.channel.send(embed=embed)
+                count = r[0]
+            if count == 0:
+                await ctx.send("There exists no such unit currently")
+            elif count == 1:
+                #query checks to see the unit in lowercase returning the unit and id (Should only be 1)
+                sql = """select gunit, gacha_id from (select lower(unit) as gunit, gacha_id from Gacha) as A where gunit like %s;"""
+                cur.execute(sql, (search,))
+                rows= cur.fetchall()
+                for r in rows:
+                    unit = r[0]
+                    g_gacha_id = r[1]
+                #This query matches the lowercase gacha_id and compares it with the actual list
+                cur.execute("select unit, rarity_id, unit_url, anime, rarity from Gacha where gacha_id = %s;", (g_gacha_id,))
+                rows = cur.fetchall()
+                for r in rows:
+                    g_unit = r[0]
+                    g_rarity = r[1]
+                    g_url = r[2]
+                    g_anime = r[3]
+                    g_rare = r[4]
+                
+                if g_rare == 'N':
+                    clr = discord.Color.default()
+                    t_url = "https://i.imgur.com/MkiU1ru.png"
+                elif g_rare == 'R':
+                    clr = discord.Color.light_grey()
+                    t_url = "https://i.imgur.com/g4nD5jL.png"
+                elif g_rare == 'SR':
+                    clr = discord.Color.orange()
+                    t_url = "https://i.imgur.com/xCUSAl5.png"
+                elif g_rare == 'SSR':
+                    clr = discord.Color.red()
+                    t_url = "https://i.imgur.com/mZ9eHc3.png"
+                elif g_rare == 'UR':
+                    clr = discord.Color.magenta()
+                    t_url = "https://i.imgur.com/Vp3Nwyw.png"
+                embed = discord.Embed(
+                    color=clr                    
+                )
+                #select gunit, rarity_id, unit_url, anime from (select lower(unit) as gunit from Gacha) as A, Gacha where unit like 'keele%';
+                embed.set_thumbnail(url=f"{t_url}")
+                embed.set_image(url=f"{g_url}")
+                embed.add_field(name=f"{g_unit}", value=f"Rarity: {self.client.get_emoji(g_rarity)}\nAnime: {g_anime}")
+                await ctx.message.channel.send(embed=embed)
+            else:
+                embed = discord.Embed()
+                sql = """select gunit, gacha_id from (select lower(unit) as gunit, gacha_id from Gacha) as A where gunit like %s;"""
+                cur.execute(sql, (search,))
+                rows= cur.fetchall()
+                nums = []
+                search_display = ""
+                for r in rows:
+                    nums.append(r[1])
+                for i in nums:
+                    cur.execute("select unit, rarity_id, unit_url, anime from Gacha where gacha_id = %s;", (i,))
+                    rows = cur.fetchone()
+                    search_display += f"**{rows[0]}** - {rows[3]}\n"
+                # sql = """select unit, rarity_id, unit_url, anime from Gacha where unit like %s;"""
+                # cur.execute(sql, (search,))
+                # #cur.execute("select gunit, rarity_id, unit_url, anime from (select lower(unit) as gunit from Gacha) as A, Gacha where unit like %s%%;", (args,))
+                # rows=cur.fetchall()
+                print(f"Search: {search_display}")
+                embed.add_field(name=f"** **", value=f"{search_display}")
+                await ctx.message.channel.send(embed=embed)
     
     @commands.command()
     async def h1(self, ctx):
