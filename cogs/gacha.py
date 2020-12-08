@@ -69,7 +69,7 @@ class Gacha(commands.Cog):
             await ctx.message.channel.send(embed=embed)
         if exact_match == False:
             sql = """select count(*) from (select lower(unit) as unit from Gacha) as G where unit like %s;"""
-            search = f'{args}%'
+            search = f'%{args}%'
             cur.execute(sql, (search,))
             print(cur.mogrify(sql, (search,)))
             rows = cur.fetchall()
@@ -119,7 +119,7 @@ class Gacha(commands.Cog):
                 embed.add_field(name=f"{g_unit}", value=f"Rarity: {self.client.get_emoji(g_rarity)}\nAnime: {g_anime}")
                 await ctx.message.channel.send(embed=embed)
             else:
-                embed = discord.Embed()
+                embed = discord.Embed(color=discord.Color.blurple())
                 sql = """select gunit, gacha_id from (select lower(unit) as gunit, gacha_id from Gacha) as A where gunit like %s;"""
                 cur.execute(sql, (search,))
                 rows= cur.fetchall()
@@ -136,9 +136,16 @@ class Gacha(commands.Cog):
                 # #cur.execute("select gunit, rarity_id, unit_url, anime from (select lower(unit) as gunit from Gacha) as A, Gacha where unit like %s%%;", (args,))
                 # rows=cur.fetchall()
                 print(f"Search: {search_display}")
-                embed.add_field(name=f"** **", value=f"{search_display}")
+                embed.add_field(name=f"Found {len(nums)} results", value=f"\n{search_display}")
                 await ctx.message.channel.send(embed=embed)
-    
+    @commands.command()
+    async def sugoinfo(self, ctx):
+        embed = discord.Embed(color=discord.Color.blue())
+        embed.add_field(name="Gacha News", value=f"Currently still a WIP but a ** new batch** has been added so have fun.\n\
+            \nGive me some good images tho, most of em succ but make sure they're good dimensions. Anime planet ones got good dimensions but the pics are trash. Search !gdb sham for when dimensions go wrong {self.client.get_emoji(356789072062316544)}\
+            \n\n**NOTE:** Keep in mind your box will _**reset**_ after I finish ironing out issues and testing stuff so don't get too attached")
+        await ctx.message.channel.send(embed=embed)
+
     @commands.command()
     async def h1(self, ctx):
         params = config()
@@ -254,13 +261,13 @@ class Gacha(commands.Cog):
                     cur.execute("select unit, rarity_id, gacha_id from Gacha where rarity = 'UR' order by random() limit 1;")
                     rows = cur.fetchall()
                     for r in rows:
-                        h10 += f"{self.client.get_emoji(r[1])} **{r[0]}**\n"
+                        h10 += f"{self.client.get_emoji(r[1])} **{r[0]}** {self.client.get_emoji(r[1])}\n"
                         cur.execute("insert into Player_Gacha_Inventory(discord_id, unit, gacha_id) values (%s, %s, %s);", (ctx.message.author.id, r[0], r[2]))
                 elif rng <= 5 and rng > 1:
                     cur.execute("select unit, rarity_id, gacha_id from Gacha where rarity = 'SSR' order by random() limit 1;")
                     rows = cur.fetchall()
                     for r in rows:
-                        h10 += f"{self.client.get_emoji(r[1])} {r[0]}\n"
+                        h10 += f"{self.client.get_emoji(r[1])} **{r[0]}**\n"
                         cur.execute("insert into Player_Gacha_Inventory(discord_id, unit, gacha_id) values (%s, %s, %s);", (ctx.message.author.id, r[0], r[2]))
                 elif rng <= 30 and rng > 5:
                     cur.execute("select unit, rarity_id, gacha_id from Gacha where rarity = 'SR' order by random() limit 1;")
