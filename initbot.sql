@@ -4,6 +4,7 @@ create table Lvl (
     constraint Lvl_PK
         primary key (lvl)  
 );
+
 create table Player (
     discord_id  bigint not null,
     p_money     bigint not null,
@@ -110,7 +111,25 @@ insert into Loot (boss, gear) values
 
 insert into Lvl (lvl, ex) values
     (1, 100),
-    (2, 700);
+    (2, 300),
+    (3, 600),
+    (4, 1000),
+    (5, 1500),
+    (6, 2100),
+    (7, 2800),
+    (8, 3600),
+    (9, 4500),
+    (10, 5600),
+    (11, 6900),
+    (12, 8000),
+    (13, 10000),
+    (14, 12200),
+    (15, 14800),
+    (16, 17300),
+    (17, 19000),
+    (18, 100),
+    (19, 100),
+    (20, 100);
 
 insert into Player (discord_id, p_money, adv, lvl, p_exp) values
     (1, 0, '2020-12-03 22:50:42', 1, 0);
@@ -165,8 +184,8 @@ insert into Gacha(gacha_id, unit, descr, rarity, unit_url, anime) values
     (47, 'Nami', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/nami-76.jpg?t=1544025770', 'One Piece'),
     (48, 'Usopp', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/usopp-77.jpg?t=1429318036', 'One Piece'),
     (49, 'Sanji', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/sanji-78.jpg?t=1549471772', 'One Piece'),
-    (50, 'Chopper', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/robin-nico-80.jpg?t=1429317927', 'One Piece'),
-    (51, 'Robin', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/tony-tony-chopper-79.jpg?t=1546521587', 'One Piece'),
+    (50, 'Chopper', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/tony-tony-chopper-79.jpg?t=1546521587', 'One Piece'),
+    (51, 'Robin', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/robin-nico-80.jpg?t=1429317927 ', 'One Piece'),
     (52, 'Franky', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/franky-flam-81.jpg?t=1496845412', 'One Piece'),
     (53, 'Brook', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/brook-82.jpg?t=1554330822', 'One Piece'),
     (54, 'Portgas D. Ace', 'Sample Description', 'UR', 'https://www.anime-planet.com/images/characters/thumbs/ace-d-portgas-291.jpg?t=1535065324', 'One Piece'),
@@ -221,4 +240,5 @@ insert into Gacha(gacha_id, unit, descr, rarity, unit_url, anime) values
     (103, 'Chew', 'Sample Description', 'R', 'https://www.anime-planet.com/images/characters/thumbs/chew-1007.jpg?t=1544025115', 'One Piece'),
     (104, 'Kuroobi', 'Sample Description', 'R', 'https://www.anime-planet.com/images/characters/thumbs/kuroobi-1008.jpg?t=1544025492', 'One Piece'),
     (105, 'Hatchan', 'Sample Description', 'SR', 'https://www.anime-planet.com/images/characters/thumbs/hatchan-295.jpg?t=1544017739', 'One Piece'),
-    (106, 'Momoo', 'Sample Description', 'N', 'https://www.anime-planet.com/images/characters/thumbs/momoo-13343.jpg?t=1544025543', 'One Piece');
+    (106, 'Momoo', 'Sample Description', 'N', 'https://www.anime-planet.com/images/characters/thumbs/momoo-13343.jpg?t=1544025543', 'One Piece'),
+    (107, 'Velvet Crowe', 'Sample Descr', 'UR', 'https://cdn.discordapp.com/attachments/391628059586985986/785893500330704956/df3d504dc8df0f3e4699b1b2ec2b06d9.png', 'Tales of Berseria');
