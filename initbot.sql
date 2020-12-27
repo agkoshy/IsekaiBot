@@ -5,16 +5,39 @@ create table Lvl (
         primary key (lvl)  
 );
 
+create table Boss (
+    boss      varchar(30) not null,
+    descr     varchar(300) not null,
+    constraint Boss_PK
+        primary key (boss)
+);
+
+create table Classes (
+    main_class  varchar(300),
+    adv_class   varchar(300),
+    level_req   int,
+    prev_adv    varchar(300),
+    tame        varchar(300),
+    constraint Classes_PK
+        primary key (adv_class)
+);
 create table Player (
     discord_id  bigint not null,
     p_money     bigint not null,
     adv         timestamp,
     lvl         int    not null,
     p_exp       int    not null,
+    hp          int    not null,
+    mp          int    not null,
+    boss        varchar(300),
+    title       varchar(300),
+    game_state  varchar(300),    
     constraint User_PK
         primary key(discord_id),
     constraint Lvl_FK_lvl
-        foreign key (lvl) references Lvl(lvl)
+        foreign key (lvl) references Lvl(lvl),
+    constraint Player_FK_Boss
+        foreign key(boss) references Boss(boss)
 );
 create table Gacha (
     gacha_id    int not null,
@@ -40,12 +63,6 @@ create table Gear (
         unique(gear)
 );
 
-create table Boss (
-    boss      varchar(30) not null,
-    descr     varchar(300) not null,
-    constraint Boss_PK
-        primary key (boss)
-);
 
 create table Loot (
     boss      varchar(30) not null,

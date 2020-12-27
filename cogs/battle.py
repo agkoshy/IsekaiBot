@@ -32,31 +32,80 @@ class Battle(commands.Cog):
             if r[0] == 0:
                 player_exist = False
         if player_exist == True:
-            #Not in dungeon, Not finished exploring dungeon, Ready, Ongoing, Finished
-            if args is None:
-                x = datetime.datetime.now() + timedelta(seconds=60)
-                #while ()
-                embed = discord.Embed(color=discord.Color.dark_red())
-                boss_hp = 10
-                hp = 15
-                embed.add_field(name="Goblin HP:", value=boss_hp, inline=False)
-                embed.add_field(name="HP:", value=hp, inline=False)
-                embed.add_field(name="Attacks: ", value="Attack 1\nHeal\nAttack 2\nHehe")
-                embed.set_thumbnail(url="https://assets.stickpng.com/images/5b4eee54c051e602a568ce1b.png")
-                embed.set_footer(text=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
-                #msg = ctx.message.channel.send(embed=embed)
-                
-                msg = await ctx.message.channel.send(embed=embed)
-                await msg.add_reaction(self.client.get_emoji(788500845233700905))
-                await msg.add_reaction(self.client.get_emoji(788500845183631391))
-                await msg.add_reaction(self.client.get_emoji(788500845385482300))
-                await msg.add_reaction(self.client.get_emoji(788500845414580256))
-                #embed.set_thumbnail(url="https://assets.stickpng.com/images/5b4eee54c051e602a568ce1b.png")
-                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/217753149967040514/788569206262202402/rapeface.png")
-                embed.set_footer(text=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
-                await msg.edit(embed=embed)
-            else:
-                await ctx.send("<:gotojail:597850470060392448> Ali ")
+            #Not in Dungeon, Still Exploring Dungeon, Ready, Ongoing, Finished
+            cur.execute("select game_state from Player where discord_id = %s", (ctx.message.author.id,))
+            row = cur.fetchone()
+            if row[0] == "Not in Dungeon":
+                await ctx.send("You are not in a dungeon yet")
+            elif row[0] == "Still Exploring Dungeon":
+                await ctx.send("You are still exploring the dungeon")
+            elif row[0] == "Ready":
+                #Chooses which attack to do
+                if args is None:
+                    x = datetime.datetime.now() + timedelta(seconds=60)
+                    #while ()
+                    embed = discord.Embed(color=discord.Color.dark_red())
+                    boss_hp = 10
+                    hp = 15
+                    embed.add_field(name="Goblin HP:", value=boss_hp, inline=False)
+                    embed.add_field(name="HP:", value=hp, inline=False)
+                    embed.add_field(name="Attacks: ", value="Attack 1\nHeal\nAttack 2\nHehe")
+                    embed.set_thumbnail(url="https://assets.stickpng.com/images/5b4eee54c051e602a568ce1b.png")
+                    embed.set_footer(text=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+                    #msg = ctx.message.channel.send(embed=embed)
+                    
+                    msg = await ctx.message.channel.send(embed=embed)
+                    # await msg.add_reaction(self.client.get_emoji(788500845233700905))
+                    # await msg.add_reaction(self.client.get_emoji(788500845183631391))
+                    # await msg.add_reaction(self.client.get_emoji(788500845385482300))
+                    # await msg.add_reaction(self.client.get_emoji(788500845414580256))
+                elif args == "1":
+                    await ctx.send("<:gotojail:597850470060392448> Ali 1 ")
+                elif args == "2":
+                    await ctx.send("<:gotojail:597850470060392448> Ali 2")
+                elif args == "3":
+                    await ctx.send("<:gotojail:597850470060392448> Ali 3")
+                elif args == "4":
+                    await ctx.send("<:gotojail:597850470060392448> Ali 4")
+                else:
+                    print(args[3:-1])
+                    await ctx.send("<:gotojail:597850470060392448> Humza ")
+            elif row[0] == "Ongoing":
+                #Chooses which attack to do
+                if args is None:
+                    x = datetime.datetime.now() + timedelta(seconds=60)
+                    #while ()
+                    embed = discord.Embed(color=discord.Color.dark_red())
+                    boss_hp = 10
+                    hp = 15
+                    embed.add_field(name="Goblin HP:", value=boss_hp, inline=False)
+                    embed.add_field(name="HP:", value=hp, inline=False)
+                    embed.add_field(name="Attacks: ", value="Attack 1\nHeal\nAttack 2\nHehe", inline=False)
+                    embed.add_field(name="Previous Turn: ", value="xD")
+                    embed.set_thumbnail(url="https://assets.stickpng.com/images/5b4eee54c051e602a568ce1b.png")
+                    embed.set_footer(text=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+                    #msg = ctx.message.channel.send(embed=embed)
+                    
+                    msg = await ctx.message.channel.send(embed=embed)
+                    await msg.add_reaction(self.client.get_emoji(788500845233700905))
+                    await msg.add_reaction(self.client.get_emoji(788500845183631391))
+                    await msg.add_reaction(self.client.get_emoji(788500845385482300))
+                    await msg.add_reaction(self.client.get_emoji(788500845414580256))
+                elif args == "1":
+                    await ctx.send("<:gotojail:597850470060392448> Ali 1 ")
+                elif args == "2":
+                    await ctx.send("<:gotojail:597850470060392448> Ali 2")
+                elif args == "3":
+                    await ctx.send("<:gotojail:597850470060392448> Ali 3")
+                elif args == "4":
+                    await ctx.send("<:gotojail:597850470060392448> Ali 4")
+                else:
+                    print(args[3:-1])
+                    await ctx.send("<:gotojail:597850470060392448> Humza ")
+            elif row[0] == "Finished":
+                await ctx.send("Done")
+        else:            
+            await ctx.send("You haven't !isekai yet!")
             # while boss_hp > 0:
             #     reaction, user = await self.client.wait_for('reaction_add', timeout=60.0)
             #     if str(reaction.emoji) == '<:1_:788500845233700905>' and user == ctx.message.author:

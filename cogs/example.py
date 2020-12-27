@@ -1,6 +1,8 @@
 import discord
 import random
 import datetime
+import psycopg2
+from config import config
 from datetime import timedelta
 from datetime import date
 from discord.ext import commands
@@ -13,7 +15,16 @@ class Example(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print('Example.py is ready')
-    
+    @commands.command()
+    async def updater(self, ctx):
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+       # cur.execute("insert into Lvl (lvl, ex) values (%s, %s)", (100,100*100*100))
+            
+        cur.close()
+        conn.commit()
+        conn.close() 
     @commands.command()
     async def slack(self, ctx):
         dnow = datetime.datetime.now()
