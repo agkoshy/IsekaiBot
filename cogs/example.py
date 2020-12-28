@@ -20,7 +20,10 @@ class Example(commands.Cog):
         params = config()
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
-       # cur.execute("insert into Lvl (lvl, ex) values (%s, %s)", (100,100*100*100))
+        # cur.execute("select discord_id from Player;")
+        # rows = cur.fetchall()        
+        # for r in rows:
+        #     cur.execute("insert into Player_Stats (discord_id, str, intl, dex, vit, agi, wis, crit, acc) values (%s, 1, 1, 1, 1, 1, 1, 5, 70)", (r[0],))
             
         cur.close()
         conn.commit()

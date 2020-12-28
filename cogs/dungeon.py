@@ -21,7 +21,7 @@ class Dungeon(commands.Cog):
     async def dungeon(self, ctx):
         params = config()
         conn = psycopg2.connect(**params)
-        x = datetime.datetime.now() + timedelta(seconds=10)
+        x = datetime.datetime.now() + timedelta(seconds=1)
         y = x.strftime('%Y-%m-%d %H:%M:%S')
         print(y)
         cur = conn.cursor()
@@ -67,7 +67,27 @@ class Dungeon(commands.Cog):
                     await ctx.send("You have completed the dungeon! You gained 30 exp!")
                 else:
                     cur.execute("update Player set lvl = %s where discord_id = %s", (lvl + 1, ctx.message.author.id))
-                    await ctx.send("You have completed the dungeon! You gained 30 exp! You have leveled up!")
+                    cur.execute("select str_per_lvl, intl_per_lvl, dex_per_lvl, vit_per_lvl, wis_per_lvl, agi_per_lvl from Classes where adv_class = %s;", ("Villager",))
+                    r = cur.fetchone()
+                    str_per_lvl = r[0]
+                    intl_per_lvl = r[1]
+                    dex_per_lvl = r[2]
+                    vit_per_lvl = r[3]
+                    wis_per_lvl = r[4]
+                    agi_per_lvl = r[5]
+                    cur.execute("select str, intl, dex, vit, wis, agi from Player_Stats where discord_id = %s;", (ctx.message.author.id,))
+                    row = cur.fetchone()
+                    sth = row[0]
+                    intl = row[1]
+                    dex = row[2]
+                    vit = row[3]
+                    wis = row[4]
+                    agi = row[5]
+                    embed = discord.Embed(color=discord.Color.dark_teal())
+                    embed.add_field(name="** **",value=f"**You have leveled up!**  \n\nSTR: {sth} + {str_per_lvl}\nINT: {intl} + {intl_per_lvl}\nDEX: {dex} + \
+                        {dex_per_lvl}\nVIT: {vit} + {vit_per_lvl}\nWIS: {wis} + {wis_per_lvl}\nAGI: {agi} + {agi_per_lvl}\n" )
+                    cur.execute("update Player_Stats set str = %s, intl = %s, dex = %s, vit = %s, wis = %s, agi = %s where discord_id = %s;", (sth+str_per_lvl, intl+intl_per_lvl, dex+dex_per_lvl, vit+vit_per_lvl, wis+wis_per_lvl, agi+agi_per_lvl, ctx.message.author.id))
+                    await ctx.message.channel.send(embed=embed)
             else:
                 duration = adv - now 
                 print(adv)

@@ -35,13 +35,15 @@ class Status(commands.Cog):
                 adv = r[2]
                 lvl = r[3]
                 p_exp = r[4]
+            cur.execute("select ex from Lvl where lvl = %s;", (lvl,))
+            r = cur.fetchone()
             statusEmbed = discord.Embed(
                 colour = 1752220
             )
             in_adv = "Currently in dungeon"
             if adv is None:
                 in_adv = "Not in dungeon"
-            statusEmbed.add_field(name="Status", value=f"Name: {ctx.message.author.name}\nLevel: {lvl}\nExp: {p_exp}\nGold: {gold}\nDungeon Status: {in_adv}")
+            statusEmbed.add_field(name="Status", value=f"Name: {ctx.message.author.name}\nLevel: {lvl}\nExp: {p_exp}/{r[0]}\nGold: {gold}\nDungeon Status: {in_adv}")
             print(ctx.message.author.avatar_url)
             statusEmbed.set_thumbnail(url=f"{ctx.message.author.avatar_url}")
             await ctx.send(embed=statusEmbed)
