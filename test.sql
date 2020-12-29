@@ -1,16 +1,62 @@
-alter table Classes 
-add column base_str int,
-add column base_intl int,
-add column base_dex int,
-add column base_vit int,
-add column base_wis int,
-add column base_agi int,
-add column str_per_lvl int,
-add column dex_per_lvl int,
-add column intl_per_lvl int,
-add column wis_per_lvl int,
-add column vit_per_lvl int,
-add column agi_per_lvl int;
+insert into UserMoves (move_id, move_name, move_descr, move_type, lvl_req, base_dmg, scaling_dmg, stat_type, weapon_type, elemental_type, elemental_chance, elemental_dmg, off_elemental_type, ofF_elemental_chance, off_elemental_dmg) values
+	(2, 'Torch Swing', 'A low power swing from a torch that might be capable of inflicting burn', 'Physical', 1, 2, 50, 'intl', 'Sword', 'None', 50, 5, 'None', 0, 0);
+-- create table Player_Moves (
+-- 	discord_id	bigint,
+-- 	move_one	varchar(300),
+-- 	move_two	varchar(300),
+-- 	move_three	varchar(300),
+-- 	move_four	varchar(300),
+-- 	constraint Player_Moves_FK
+-- 		foreign key (discord_id) references Player(discord_id)
+-- );
+-- create table UserMoves( 
+--     move_id  int,
+-- 	move_name  varchar(300),
+-- 	move_descr varchar(300),
+-- 	move_type  varchar(300),
+-- 	lvl_req		int,
+-- 	base_dmg   int,
+-- 	scaling_dmg int,
+-- 	stat_type  varchar(300),
+-- 	weapon_type varchar(300),
+-- 	elemental_type varchar(300),
+-- 	elemental_chance int,
+-- 	elemental_dmg int,
+-- 	off_elemental_type varchar(300),
+-- 	ofF_elemental_chance int,
+-- 	off_elemental_dmg int,
+-- 	constraint UserMoves_PK
+-- 		primary key (move_id)
+-- );
+
+-- create table Player_Gear (
+-- 	discord_id bigint,
+-- 	helm	varchar(300),
+-- 	chest	varchar(300),
+-- 	pants	varchar(300),
+-- 	boots	varchar(300),
+-- 	gloves	varchar(300),
+-- 	necklace varchar(300),
+-- 	ring	varchar(300),
+-- 	cape	varchar(300),
+-- 	weapon	varchar(300),
+-- 	offhand_weapon	varchar(300),
+-- 	constraint Player_Gear
+-- 		foreign key (discord_id) references Player(discord_id)
+-- );
+-- alter table Classes 
+-- add column base_str int,
+-- add column base_intl int,
+-- add column base_dex int,
+-- add column base_vit int,
+-- add column base_wis int,
+-- add column base_agi int,
+-- add column str_per_lvl int,
+-- add column dex_per_lvl int,
+-- add column intl_per_lvl int,
+-- add column wis_per_lvl int,
+-- add column vit_per_lvl int,
+-- add column agi_per_lvl int;
 -- create table Player_Stats  (
 --     discord_id  bigint,
 --     str         int,
@@ -32,8 +78,8 @@ add column agi_per_lvl int;
 --     ('Slime', 'Slime', 150, 10, 'A rabbit creature with a horn growing out of its head. ', 4),
 --     ('Lesser Wolf', 'Wolf', 120, 8, 'A small wolf monster capable of inflicting bleed', 4);
 
-insert into Classes (adv_class, main_class, level_req, prev_adv, base_str, base_intl, base_dex, base_vit, base_wis, base_agi, str_per_lvl, dex_per_lvl, intl_per_lvl, wis_per_lvl, vit_per_lvl, agi_per_lvl) values
-        ('Villager', 'Villager',1,'None',1,1,1,1,1,1,1,1,1,1,1,1);
+-- insert into Classes (adv_class, main_class, level_req, prev_adv, base_str, base_intl, base_dex, base_vit, base_wis, base_agi, str_per_lvl, dex_per_lvl, intl_per_lvl, wis_per_lvl, vit_per_lvl, agi_per_lvl) values
+--         ('Villager', 'Villager',1,'None',1,1,1,1,1,1,1,1,1,1,1,1);
 --     ('Warrior', 'Warrior', 10, 'Villager'),
 --     ('Mage', 'Mage', 10, 'Villager'),
 --     ('Ranger', 'Ranger', 10, 'Villager'),

@@ -60,7 +60,63 @@ class Battle(commands.Cog):
                     # await msg.add_reaction(self.client.get_emoji(788500845385482300))
                     # await msg.add_reaction(self.client.get_emoji(788500845414580256))
                 elif args == "1":
-                    await ctx.send("<:gotojail:597850470060392448> Ali 1 ")
+
+                    cur.execute("select move_two from Player_Moves where discord_id = %s", (ctx.message.author.id,))
+                    row = cur.fetchone()
+                    move_one = row[0]
+                    cur.execute("select move_name, move_descr, move_type, lvl_req, base_dmg, scaling_dmg, stat_type, weapon_type, elemental_type, elemental_chance, elemental_dmg, off_elemental_type, off_elemental_chance, off_elemental_dmg from Usermoves where move_name = %s;", (move_one,))
+                    r = cur.fetchone()
+                    print(r)
+                    move_name = r[0]
+                    move_descr = r[1]
+                    move_type = r[2]
+                    lvl_req = r[3]
+                    base_dmg = r[4]
+                    scaling_dmg = r[5]
+                    stat_type = r[6]
+                    weapon_type = r[7]
+                    elemental_type = r[8]
+                    elemental_chance = r[9]
+                    elemental_dmg = r[10]
+                    off_elemental_type = r[11]
+                    off_elemental_chance = r[12]
+                    off_elemental_dmg = r[13]
+
+                    cur.execute("select str, intl, dex, vit, agi, wis, crit, acc from Player_Stats where discord_id = %s;", (ctx.message.author.id,))
+                    row = cur.fetchone()
+                    sth = row[0]
+                    intl = row[1]
+                    dex = row[2]
+                    vit = row[3]
+                    wis = row[4]
+                    agi = row[5]
+                    crit = row[6]
+                    acc = row[7]
+                    
+                    rng_acc = random.randint(1,100)
+                    rng_crit = random.randint(1,100)
+                    if rng_acc <= acc:
+                        if rng_crit <= crit:
+                            if stat_type == "str":
+                                dmg = (base_dmg + ((scaling_dmg/100)*sth))*1.5
+                            elif stat_type == "intl":
+                                dmg = (base_dmg + ((scaling_dmg/100)*intl))*1.5
+                            elif stat_type == "dex":
+                                dmg = (base_dmg + ((scaling_dmg/100)*dex))*1.5                            
+                        else:
+                            if stat_type == "str":
+                                dmg = base_dmg + ((scaling_dmg/100)*sth)
+                            elif stat_type == "intl":
+                                dmg = base_dmg + ((scaling_dmg/100)*intl)
+                            elif stat_type == "dex":
+                                dmg = base_dmg + ((scaling_dmg/100)*dex)
+                        rng_elem = random.randint(1,100)
+                        if rng_elem <= elemental_chance:
+                            print(f"Burn applied and takes {elemental_dmg}")
+                    else:
+                        dmg = 0
+                    print(dmg)
+                    #await ctx.send("<:gotojail:597850470060392448> Ali 1 ")
                 elif args == "2":
                     await ctx.send("<:gotojail:597850470060392448> Ali 2")
                 elif args == "3":

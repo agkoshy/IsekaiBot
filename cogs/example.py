@@ -20,6 +20,7 @@ class Example(commands.Cog):
         params = config()
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
+        cur.execute("insert into Player_Moves (discord_id, move_one) values (%s, %s);", (ctx.message.author.id, "Villager Swipe"))
         # cur.execute("select discord_id from Player;")
         # rows = cur.fetchall()        
         # for r in rows:
