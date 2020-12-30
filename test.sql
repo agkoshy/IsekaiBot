@@ -1,13 +1,51 @@
-insert into UserMoves (move_id, move_name, move_descr, move_type, lvl_req, base_dmg, scaling_dmg, stat_type, weapon_type, elemental_type, elemental_chance, elemental_dmg, off_elemental_type, ofF_elemental_chance, off_elemental_dmg) values
-	(2, 'Torch Swing', 'A low power swing from a torch that might be capable of inflicting burn', 'Physical', 1, 2, 50, 'intl', 'Sword', 'None', 50, 5, 'None', 0, 0);
--- create table Player_Moves (
--- 	discord_id	bigint,
--- 	move_one	varchar(300),
--- 	move_two	varchar(300),
--- 	move_three	varchar(300),
--- 	move_four	varchar(300),
--- 	constraint Player_Moves_FK
--- 		foreign key (discord_id) references Player(discord_id)
+-- insert into UserMoves (move_id, move_name, move_descr, move_type, lvl_req, base_dmg, scaling_dmg, stat_type, weapon_type, elemental_type, elemental_chance, elemental_dmg, off_elemental_type, ofF_elemental_chance, off_elemental_dmg) values
+-- 	(2, 'Torch Swing', 'A low power swing from a torch that might be capable of inflicting burn', 'Physical', 1, 2, 50, 'intl', 'Sword', 'None', 50, 5, 'None', 0, 0);
+
+select * from Player_Gear where discord_id = 135151849320873986
+and helm is not NULL
+and chest is not NULL
+and gloves is not NULL
+and boots is not NULL
+and necklace is not NULL
+and pants is not NULL
+and ring is not NULL
+and cape is not NULL
+and offhand_weapon is not NULL;
+-- create table Gear_Ailments (
+-- 	gear_id		int,
+-- 	gear		varchar(300),
+-- 	burn		varchar(30),
+-- 	burn_per_turn int,
+-- 	burn_timer	int,
+-- 	wet		varchar(30),
+-- 	wet_per_turn int,
+-- 	wet_timer	int,
+-- 	wind		varchar(30),
+-- 	wind_crit int,
+-- 	wind_timer	int,
+-- 	earth		varchar(30),
+-- 	earth_per_turn int,
+-- 	earth_timer	int,
+-- 	bleed		varchar(30),
+-- 	bleed_per_turn int,
+-- 	bleed_timer	int,
+-- 	poison		varchar(30),
+-- 	poison_per_turn int,
+-- 	poison_timer	int,
+-- 	chilled		varchar(30),
+-- 	chilled_multi int,
+-- 	chilled_timer	int,
+-- 	electro		varchar(30),
+-- 	electro_chance int,
+-- 	electro_timer	int,
+-- 	light		varchar(30),
+-- 	light_per_turn int,
+-- 	light_timer	int,
+-- 	dark		varchar(30),
+-- 	dark_per_turn int,
+-- 	dark_timer	int,
+-- 	constraint Gear_Ailments_PK
+-- 		primary key (gear_id)
 -- );
 -- create table UserMoves( 
 --     move_id  int,

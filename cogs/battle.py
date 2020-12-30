@@ -59,9 +59,17 @@ class Battle(commands.Cog):
                     # await msg.add_reaction(self.client.get_emoji(788500845183631391))
                     # await msg.add_reaction(self.client.get_emoji(788500845385482300))
                     # await msg.add_reaction(self.client.get_emoji(788500845414580256))
-                elif args == "1":
-
-                    cur.execute("select move_two from Player_Moves where discord_id = %s", (ctx.message.author.id,))
+                elif args == "1" or args == "2" or args == "3" or args == "4":
+                    if args == "1":
+                        move = "move_one"
+                    elif args == "2":
+                        move = "move_two"
+                    elif args == "3":
+                        move = "move_three"
+                    elif args == "4":
+                        move = "move_four"
+                    print(move)
+                    cur.execute(f"select {move} from Player_Moves where discord_id = %s", (ctx.message.author.id,))
                     row = cur.fetchone()
                     move_one = row[0]
                     cur.execute("select move_name, move_descr, move_type, lvl_req, base_dmg, scaling_dmg, stat_type, weapon_type, elemental_type, elemental_chance, elemental_dmg, off_elemental_type, off_elemental_chance, off_elemental_dmg from Usermoves where move_name = %s;", (move_one,))
@@ -93,6 +101,63 @@ class Battle(commands.Cog):
                     crit = row[6]
                     acc = row[7]
                     
+                    equipments = ["helm", "chest", "pants", "boots", "gloves", "necklace", "ring", "cape", "weapon", "offhand_weapon"]
+                    i = 0
+                    add_sth = 0
+                    add_intl = 0
+                    add_dex = 0
+                    add_vit = 0
+                    add_wis = 0
+                    add_agi = 0
+                    add_crit = 0
+                    add_acc = 0
+                    add_crit_multi = 0
+                    while (i < len(equipments)):
+                        #Gives me equipment name per slot
+                        cur.execute(f"select {equipments[i]} from Player_Gear where discord_id = {ctx.message.author.id};")
+                        gear_name_row = cur.fetchone()
+                        #Gets me all the stats for said equipment
+                        cur.execute("select str, intl, dex, vit, agi, wis, crit, acc, crit_multi from Gear_Stats where gear = %s;", (gear_name_row[0],))
+                        add_row = cur.fetchone()  
+                        if add_row[0] is None:  
+                            add_sth += 0
+                        else:
+                            add_sth += add_row[0]
+                        if add_row[1] is None:  
+                            add_intl += 0
+                        else:
+                            add_intl += add_row[1]
+                        if add_row[2] is None:  
+                            add_dex += 0
+                        else:
+                            add_dex += add_row[2]
+                        if add_row[3] is None:   
+                            add_vit += 0
+                        else:
+                            add_vit += add_row[3]
+                        if add_row[4] is None:  
+                            add_wis += 0
+                        else:
+                            add_wis += add_row[4]
+                        if add_row[5] is None:  
+                            add_agi += 0
+                        else:
+                            add_agi += add_row[5]
+                        if add_row[6] is None:  
+                            add_crit += 0
+                        else:
+                            add_crit += add_row[6]
+                        if add_row[7] is None:  
+                            add_acc += 0
+                        else:
+                            add_acc += add_row[7]
+                        if add_row[8] is None:  
+                            add_crit_multi += 0  
+                        else:     
+                            add_crit_multi += add_row[8]            
+                        i = i + 1
+                        
+                    print(f"add str {add_sth} add int {add_intl} add dex {add_dex} add vit {add_vit} add wis {add_wis} add agi {add_agi} add crit {add_crit} add acc {add_acc} add crit m {add_crit_multi}")
                     rng_acc = random.randint(1,100)
                     rng_crit = random.randint(1,100)
                     if rng_acc <= acc:
@@ -116,13 +181,13 @@ class Battle(commands.Cog):
                     else:
                         dmg = 0
                     print(dmg)
-                    #await ctx.send("<:gotojail:597850470060392448> Ali 1 ")
-                elif args == "2":
-                    await ctx.send("<:gotojail:597850470060392448> Ali 2")
-                elif args == "3":
-                    await ctx.send("<:gotojail:597850470060392448> Ali 3")
-                elif args == "4":
-                    await ctx.send("<:gotojail:597850470060392448> Ali 4")
+                #     #await ctx.send("<:gotojail:597850470060392448> Ali 1 ")
+                # elif args == "2":
+                #     await ctx.send("<:gotojail:597850470060392448> Ali 2")
+                # elif args == "3":
+                #     await ctx.send("<:gotojail:597850470060392448> Ali 3")
+                # elif args == "4":
+                #     await ctx.send("<:gotojail:597850470060392448> Ali 4")
                 else:
                     print(args[3:-1])
                     await ctx.send("<:gotojail:597850470060392448> Humza ")
