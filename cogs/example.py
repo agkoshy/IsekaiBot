@@ -20,6 +20,12 @@ class Example(commands.Cog):
         params = config()
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
+        cur.execute("select discord_id from Player;")
+        rows = cur.fetchall()
+        # for r in rows:
+        #     gear_id = r[0]
+        #     cur.execute("insert into Player_Gear (discord_id) values (%s);", (r[0],))
+        #     cur.execute("insert into Player_Inventory (discord_id) values (%s);", (r[0],))
         # cur.execute("select discord_id from Player;")
         # rows = cur.fetchall()        
         # for r in rows:

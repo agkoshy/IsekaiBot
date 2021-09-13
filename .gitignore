@@ -1,4 +1,5 @@
-
+**/pycache
 database.ini
 token.txt
 todo.txt
+yrb_schema.sql

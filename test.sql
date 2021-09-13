@@ -1,16 +1,100 @@
-alter table Classes 
-add column base_str int,
-add column base_intl int,
-add column base_dex int,
-add column base_vit int,
-add column base_wis int,
-add column base_agi int,
-add column str_per_lvl int,
-add column dex_per_lvl int,
-add column intl_per_lvl int,
-add column wis_per_lvl int,
-add column vit_per_lvl int,
-add column agi_per_lvl int;
+-- insert into UserMoves (move_id, move_name, move_descr, move_type, lvl_req, base_dmg, scaling_dmg, stat_type, weapon_type, elemental_type, elemental_chance, elemental_dmg, off_elemental_type, ofF_elemental_chance, off_elemental_dmg) values
+-- 	(2, 'Torch Swing', 'A low power swing from a torch that might be capable of inflicting burn', 'Physical', 1, 2, 50, 'intl', 'Sword', 'None', 50, 5, 'None', 0, 0);
+
+select * from Player_Gear where discord_id = 135151849320873986
+and helm is not NULL
+and chest is not NULL
+and gloves is not NULL
+and boots is not NULL
+and necklace is not NULL
+and pants is not NULL
+and ring is not NULL
+and cape is not NULL
+and offhand_weapon is not NULL;
+-- create table Gear_Ailments (
+-- 	gear_id		int,
+-- 	gear		varchar(300),
+-- 	burn		varchar(30),
+-- 	burn_per_turn int,
+-- 	burn_timer	int,
+-- 	wet		varchar(30),
+-- 	wet_per_turn int,
+-- 	wet_timer	int,
+-- 	wind		varchar(30),
+-- 	wind_crit int,
+-- 	wind_timer	int,
+-- 	earth		varchar(30),
+-- 	earth_per_turn int,
+-- 	earth_timer	int,
+-- 	bleed		varchar(30),
+-- 	bleed_per_turn int,
+-- 	bleed_timer	int,
+-- 	poison		varchar(30),
+-- 	poison_per_turn int,
+-- 	poison_timer	int,
+-- 	chilled		varchar(30),
+-- 	chilled_multi int,
+-- 	chilled_timer	int,
+-- 	electro		varchar(30),
+-- 	electro_chance int,
+-- 	electro_timer	int,
+-- 	light		varchar(30),
+-- 	light_per_turn int,
+-- 	light_timer	int,
+-- 	dark		varchar(30),
+-- 	dark_per_turn int,
+-- 	dark_timer	int,
+-- 	constraint Gear_Ailments_PK
+-- 		primary key (gear_id)
+-- );
+-- create table UserMoves( 
+--     move_id  int,
+-- 	move_name  varchar(300),
+-- 	move_descr varchar(300),
+-- 	move_type  varchar(300),
+-- 	lvl_req		int,
+-- 	base_dmg   int,
+-- 	scaling_dmg int,
+-- 	stat_type  varchar(300),
+-- 	weapon_type varchar(300),
+-- 	elemental_type varchar(300),
+-- 	elemental_chance int,
+-- 	elemental_dmg int,
+-- 	off_elemental_type varchar(300),
+-- 	ofF_elemental_chance int,
+-- 	off_elemental_dmg int,
+-- 	constraint UserMoves_PK
+-- 		primary key (move_id)
+-- );
+
+-- create table Player_Gear (
+-- 	discord_id bigint,
+-- 	helm	varchar(300),
+-- 	chest	varchar(300),
+-- 	pants	varchar(300),
+-- 	boots	varchar(300),
+-- 	gloves	varchar(300),
+-- 	necklace varchar(300),
+-- 	ring	varchar(300),
+-- 	cape	varchar(300),
+-- 	weapon	varchar(300),
+-- 	offhand_weapon	varchar(300),
+-- 	constraint Player_Gear
+-- 		foreign key (discord_id) references Player(discord_id)
+-- );
+-- alter table Classes 
+-- add column base_str int,
+-- add column base_intl int,
+-- add column base_dex int,
+-- add column base_vit int,
+-- add column base_wis int,
+-- add column base_agi int,
+-- add column str_per_lvl int,
+-- add column dex_per_lvl int,
+-- add column intl_per_lvl int,
+-- add column wis_per_lvl int,
+-- add column vit_per_lvl int,
+-- add column agi_per_lvl int;
 -- create table Player_Stats  (
 --     discord_id  bigint,
 --     str         int,
@@ -32,8 +116,8 @@ add column agi_per_lvl int;
 --     ('Slime', 'Slime', 150, 10, 'A rabbit creature with a horn growing out of its head. ', 4),
 --     ('Lesser Wolf', 'Wolf', 120, 8, 'A small wolf monster capable of inflicting bleed', 4);
 
-insert into Classes (adv_class, main_class, level_req, prev_adv, base_str, base_intl, base_dex, base_vit, base_wis, base_agi, str_per_lvl, dex_per_lvl, intl_per_lvl, wis_per_lvl, vit_per_lvl, agi_per_lvl) values
-        ('Villager', 'Villager',1,'None',1,1,1,1,1,1,1,1,1,1,1,1);
+-- insert into Classes (adv_class, main_class, level_req, prev_adv, base_str, base_intl, base_dex, base_vit, base_wis, base_agi, str_per_lvl, dex_per_lvl, intl_per_lvl, wis_per_lvl, vit_per_lvl, agi_per_lvl) values
+--         ('Villager', 'Villager',1,'None',1,1,1,1,1,1,1,1,1,1,1,1);
 --     ('Warrior', 'Warrior', 10, 'Villager'),
 --     ('Mage', 'Mage', 10, 'Villager'),
 --     ('Ranger', 'Ranger', 10, 'Villager'),
