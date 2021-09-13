@@ -70,7 +70,7 @@ class Equip(commands.Cog):
             embed.add_field(name="** **", value=f"Weapon: {weapon}\n Weapon 2: {offhand}")
             await ctx.message.channel.send(embed=embed)
         else:
-            ctx.send("You haven't !isekai yet sir")
+            await ctx.send("You haven't !isekai yet sir")
         cur.close()
         conn.commit()
         conn.close() 
@@ -90,7 +90,7 @@ class Equip(commands.Cog):
                 await ctx.send("Need to specify the equipment you want to add")
             else:
                 sql = """select count(*) from (select lower(gear) as gear from Gear) as G where gear like %s;"""
-                search = f'%{args}%'
+                search = f'%{args.lower()}%'
                 cur.execute(sql, (search,))
                 print(cur.mogrify(sql, (search,)))
                 rows = cur.fetchone()
@@ -99,18 +99,21 @@ class Equip(commands.Cog):
                 elif rows[0] == 1:
                     print("1 exists")
                     sql = """select gear, equiptype, gear_id from (select lower(gear) as gear, equiptype, gear_id from Gear) as G where gear like %s;"""
-                    search = f'%{args}%'
+                    print(args.lower())
+                    search = f'%{args.lower()}%'
                     cur.execute(sql, (search,))
                     print(cur.mogrify(sql, (search,)))
                     rows = cur.fetchone()
                     cur.execute("select gear from Gear where gear_id = %s;", (rows[2],))
                     r = cur.fetchone()
+                    if rows[1] == "Helmet":
+                        cur.execute("update Player_Gear set helm = %s where discord_id = %s;", (r[0], ctx.message.author.id))
                     if rows[1] == "Sword":
                         cur.execute("update Player_Gear set weapon = %s where discord_id = %s;", (r[0], ctx.message.author.id))
                 else:
                     print("more than 1")
         else:
-            ctx.send("You haven't !isekai yet sir")
+            await ctx.send("You haven't !isekai yet sir")
         cur.close()
         conn.commit()
         conn.close() 
