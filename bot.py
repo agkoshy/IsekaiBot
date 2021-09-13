@@ -29,6 +29,7 @@ async def on_ready():
     cur.close()
     conn.commit()
     conn.close()
+
 @client.command()
 async def update_rarity(ctx):
     if ctx.message.author.id == 135151849320873986:

@@ -39,7 +39,39 @@ create table Player (
     constraint Player_FK_Boss
         foreign key(boss) references Boss(boss)
 );
+create table Player_Gamestate(
+    discord_id bigint,
+    debuffs int,
+    elemental_type varchar(300),
+    elemental_damage int,
+    elemental_text varchar(300),
+    off_elemental_type varchar(300),
+    off_elemental_damage int,
+    off_elemental_text varchar(300),    
+    preskip int,
+    preskip_text varchar(300),
+    postskip int,
+    postskip_text varchar(300),
+    constraint Player_Gamestate_PK
+         primary key (discord_id)
+);
 
+create table Player_Boss_Gamestate (
+    discord_id bigint,
+    debuffs int,
+    elemental_type varchar(300),
+    elemental_damage int,
+    elemental_text varchar(300),
+    off_elemental_type varchar(300),
+    off_elemental_damage int,
+    off_elemental_text varchar(300),    
+    preskip int,
+    preskip_text varchar(300),
+    postskip int,
+    postskip_text varchar(300),
+    constraint Player_Boss_Gamestate_PK
+         primary key (discord_id)
+);
 create table Player_Debuffs (
     player  bigint,
     burn    varchar(30),

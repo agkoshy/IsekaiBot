@@ -1,16 +1,10 @@
 -- insert into UserMoves (move_id, move_name, move_descr, move_type, lvl_req, base_dmg, scaling_dmg, stat_type, weapon_type, elemental_type, elemental_chance, elemental_dmg, off_elemental_type, ofF_elemental_chance, off_elemental_dmg) values
 -- 	(2, 'Torch Swing', 'A low power swing from a torch that might be capable of inflicting burn', 'Physical', 1, 2, 50, 'intl', 'Sword', 'None', 50, 5, 'None', 0, 0);
-
-select * from Player_Gear where discord_id = 135151849320873986
-and helm is not NULL
-and chest is not NULL
-and gloves is not NULL
-and boots is not NULL
-and necklace is not NULL
-and pants is not NULL
-and ring is not NULL
-and cape is not NULL
-and offhand_weapon is not NULL;
+alter table usermoves
+add column elemental_text varchar(300),
+add column off_elemental_text varchar(300);
+-- insert into bossmoves (move_id, move_name, boss, damage, move_text) values 
+--     (4, 'Slimed', 'Small Slime', 2, 'Small Slime slimes you with 2 damage');
 -- create table Gear_Ailments (
 -- 	gear_id		int,
 -- 	gear		varchar(300),

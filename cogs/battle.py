@@ -41,16 +41,22 @@ class Battle(commands.Cog):
                 await ctx.send("You are still exploring the dungeon")
             elif row[0] == "Ready":
                 #Chooses which attack to do
+                #cur.execute("insert into Player_Gamestate (discord_id, debuffs, elemental_type, elemental_damage, elemental_text, ) values into (%s);", (ctx.message.author.id,))
                 if args is None:
                     x = datetime.datetime.now() + timedelta(seconds=60)
                     #while ()
+                    cur.execute("select boss from Player where discord_id = %s;", (ctx.message.author.id,))
+                    boss_name = cur.fetchone()
+                    cur.execute("select hp, boss_thumbnail from Boss where boss  = %s;", (boss_name[0],))
+                    boss_hp = cur.fetchone()
+                    cur.execute("select move_one, move_two, move_three, move_four from Player_Moves where discord_id = %s;", (ctx.message.author.id,))
+                    player_move = cur.fetchone()
                     embed = discord.Embed(color=discord.Color.dark_red())
-                    boss_hp = 10
-                    hp = 15
-                    embed.add_field(name="Goblin HP:", value=boss_hp, inline=False)
+                    hp = 10
+                    embed.add_field(name=f"{boss_name[0]} HP:", value=boss_hp[0], inline=False)
                     embed.add_field(name="HP:", value=hp, inline=False)
-                    embed.add_field(name="Attacks: ", value="Attack 1\nHeal\nAttack 2\nHehe")
-                    embed.set_thumbnail(url="https://assets.stickpng.com/images/5b4eee54c051e602a568ce1b.png")
+                    embed.add_field(name="Attacks: ", value=f"{player_move[0]}\n{player_move[1]}\n{player_move[2]}\n{player_move[3]}")
+                    embed.set_thumbnail(url=f"{boss_hp[1]}")
                     embed.set_footer(text=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
                     #msg = ctx.message.channel.send(embed=embed)
                     
@@ -69,10 +75,12 @@ class Battle(commands.Cog):
                     elif args == "4":
                         move = "move_four"
                     print(move)
-                    cur.execute(f"select {move} from Player_Moves where discord_id = %s", (ctx.message.author.id,))
+                    cur.execute(f"select {move} from Player_Moves where discord_id = {ctx.message.author.id}")
                     row = cur.fetchone()
                     move_one = row[0]
-                    cur.execute("select move_name, move_descr, move_type, lvl_req, base_dmg, scaling_dmg, stat_type, weapon_type, elemental_type, elemental_chance, elemental_dmg, off_elemental_type, off_elemental_chance, off_elemental_dmg from Usermoves where move_name = %s;", (move_one,))
+                    cur.execute("select move_name, move_descr, move_type, lvl_req, base_dmg, scaling_dmg, stat_type, weapon_type, elemental_type, \
+                        elemental_chance, elemental_dmg, elemental_text, off_elemental_type, off_elemental_chance, off_elemental_dmg, off_elemental_text,\
+                            move_pretext, move_posttext, preskip, pre_text, postskip, post_text, mp_cost from Usermoves where move_name = %s;", (move_one,))
                     r = cur.fetchone()
                     print(r)
                     move_name = r[0]
@@ -86,18 +94,27 @@ class Battle(commands.Cog):
                     elemental_type = r[8]
                     elemental_chance = r[9]
                     elemental_dmg = r[10]
-                    off_elemental_type = r[11]
-                    off_elemental_chance = r[12]
-                    off_elemental_dmg = r[13]
+                    elemental_text = r[11]
+                    off_elemental_type = r[12]
+                    off_elemental_chance = r[13]
+                    off_elemental_dmg = r[14]
+                    off_elemental_text = r[15]
+                    move_pretext = r[16]
+                    move_posttext = r[17]
+                    preskip = r[18]
+                    pre_text = r[19]
+                    postskip = r[20]
+                    post_text = r[21]
+                    mp_cost = r[22]
 
-                    cur.execute("select str, intl, dex, vit, agi, wis, crit, acc from Player_Stats where discord_id = %s;", (ctx.message.author.id,))
+                    cur.execute("select str, intl, dex, vit, eva, wis, crit, acc from Player_Stats where discord_id = %s;", (ctx.message.author.id,))
                     row = cur.fetchone()
                     sth = row[0]
                     intl = row[1]
                     dex = row[2]
                     vit = row[3]
                     wis = row[4]
-                    agi = row[5]
+                    eva = row[5]
                     crit = row[6]
                     acc = row[7]
                     
@@ -108,7 +125,7 @@ class Battle(commands.Cog):
                     add_dex = 0
                     add_vit = 0
                     add_wis = 0
-                    add_agi = 0
+                    add_eva = 0
                     add_crit = 0
                     add_acc = 0
                     add_crit_multi = 0
@@ -116,71 +133,125 @@ class Battle(commands.Cog):
                         #Gives me equipment name per slot
                         cur.execute(f"select {equipments[i]} from Player_Gear where discord_id = {ctx.message.author.id};")
                         gear_name_row = cur.fetchone()
+                        if gear_name_row[0] is not None:
+                            print("no")
+                        else: 
+                            print("yes")
                         #Gets me all the stats for said equipment
-                        cur.execute("select str, intl, dex, vit, agi, wis, crit, acc, crit_multi from Gear_Stats where gear = %s;", (gear_name_row[0],))
-                        add_row = cur.fetchone()  
-                        if add_row[0] is None:  
-                            add_sth += 0
-                        else:
+                        if gear_name_row[0] is not None:
+                            cur.execute("select str, intl, dex, vit, eva, wis, crit, acc, crit_multi from Gear_Stats where gear = %s;", (gear_name_row[0],))
+                            add_row = cur.fetchone() 
                             add_sth += add_row[0]
-                        if add_row[1] is None:  
-                            add_intl += 0
-                        else:
                             add_intl += add_row[1]
-                        if add_row[2] is None:  
-                            add_dex += 0
-                        else:
                             add_dex += add_row[2]
-                        if add_row[3] is None:   
-                            add_vit += 0
-                        else:
                             add_vit += add_row[3]
-                        if add_row[4] is None:  
-                            add_wis += 0
-                        else:
                             add_wis += add_row[4]
-                        if add_row[5] is None:  
-                            add_agi += 0
-                        else:
-                            add_agi += add_row[5]
-                        if add_row[6] is None:  
-                            add_crit += 0
-                        else:
+                            add_eva += add_row[5]
                             add_crit += add_row[6]
-                        if add_row[7] is None:  
-                            add_acc += 0
-                        else:
                             add_acc += add_row[7]
-                        if add_row[8] is None:  
-                            add_crit_multi += 0  
-                        else:     
-                            add_crit_multi += add_row[8]            
+                            add_crit_multi += add_row[8]         
                         i = i + 1
                         
-                    print(f"add str {add_sth} add int {add_intl} add dex {add_dex} add vit {add_vit} add wis {add_wis} add agi {add_agi} add crit {add_crit} add acc {add_acc} add crit m {add_crit_multi}")
+                    print(f"add str {sth + add_sth} add int {intl + add_intl} add dex {dex + add_dex} add vit {vit + add_vit} add wis {wis + add_wis} add eva {eva + add_eva} add crit {crit + add_crit} add acc {acc + add_acc} add crit m {add_crit_multi}")
                     rng_acc = random.randint(1,100)
                     rng_crit = random.randint(1,100)
-                    if rng_acc <= acc:
-                        if rng_crit <= crit:
-                            if stat_type == "str":
-                                dmg = (base_dmg + ((scaling_dmg/100)*sth))*1.5
-                            elif stat_type == "intl":
-                                dmg = (base_dmg + ((scaling_dmg/100)*intl))*1.5
-                            elif stat_type == "dex":
-                                dmg = (base_dmg + ((scaling_dmg/100)*dex))*1.5                            
+                    if move_type == "Physical" or move_type == "Magical" or move_type == "Speed":                          
+                        if rng_acc <= acc:
+                            if rng_crit <= crit:
+                                if stat_type == "str":
+                                    dmg = (base_dmg + ((scaling_dmg/100)*sth))*1.5
+                                elif stat_type == "intl":
+                                    dmg = (base_dmg + ((scaling_dmg/100)*intl))*1.5
+                                elif stat_type == "dex":
+                                    dmg = (base_dmg + ((scaling_dmg/100)*dex))*1.5                            
+                            else:
+                                if stat_type == "str":
+                                    dmg = base_dmg + ((scaling_dmg/100)*sth)
+                                elif stat_type == "intl":
+                                    dmg = base_dmg + ((scaling_dmg/100)*intl)
+                                elif stat_type == "dex":
+                                    dmg = base_dmg + ((scaling_dmg/100)*dex)
+                            rng_elem = random.randint(1,100)
+                            #print(rng_elem)
+                            #print(elemental_chance)
+                            if rng_elem <= elemental_chance:
+                                elem_dmg = elemental_dmg
+                                print(f"{elemental_text}")
+                            print(f"{move_pretext} {dmg} {move_posttext}")
+                                # if elemental_type == "Burn":
+                                #     print(f"Burn applied and takes {elemental_dmg}")
+                                # if elemental_type == "Wet":
+                                #     print(f"Wet applied and takes {elemental_dmg}")
+                                # if elemental_type == "Wind":
+                                #     print(f"Wind applied and takes {elemental_dmg}")
+                                # if elemental_type == "Earth":
+                                #     print(f"Earth applied and takes {elemental_dmg}")
+                                # if elemental_type == "Bleed":
+                                #     print(f"Bleed applied and takes {elemental_dmg}")
+                                # if elemental_type == "Poison":
+                                #     print(f"Poison applied and takes {elemental_dmg}")
+                                # if elemental_type == "Chill":
+                                #     print(f"Chill applied and takes {elemental_dmg}")
+                                # if elemental_type == "Electro":
+                                #     print(f"Electro applied and takes {elemental_dmg}")
+                                # if elemental_type == "Light":
+                                #     print(f"Light applied and takes {elemental_dmg}")   
+                                # if elemental_type == "Dark":
+                                #     print(f"Dark applied and takes {elemental_dmg}")
                         else:
-                            if stat_type == "str":
-                                dmg = base_dmg + ((scaling_dmg/100)*sth)
-                            elif stat_type == "intl":
-                                dmg = base_dmg + ((scaling_dmg/100)*intl)
-                            elif stat_type == "dex":
-                                dmg = base_dmg + ((scaling_dmg/100)*dex)
-                        rng_elem = random.randint(1,100)
-                        if rng_elem <= elemental_chance:
-                            print(f"Burn applied and takes {elemental_dmg}")
-                    else:
-                        dmg = 0
+                            dmg = 0
+                    elif move_type == "Heal":
+                        if rng_acc <= acc:
+                            if rng_crit <= crit:
+                                if stat_type == "str":
+                                    hp = (base_dmg + ((scaling_dmg/100)*sth))*1.5
+                                elif stat_type == "intl":
+                                    hp = (base_dmg + ((scaling_dmg/100)*intl))*1.5
+                                elif stat_type == "dex":
+                                    hp = (base_dmg + ((scaling_dmg/100)*dex))*1.5                            
+                            else:
+                                if stat_type == "str":
+                                    hp = base_dmg + ((scaling_dmg/100)*sth)
+                                elif stat_type == "intl":
+                                    hp = base_dmg + ((scaling_dmg/100)*intl)
+                                elif stat_type == "dex":
+                                    hp = base_dmg + ((scaling_dmg/100)*dex)
+                            rng_elem = random.randint(1,100)
+                            if rng_elem <= elemental_chance:
+                                elem_dmg = elemental_dmg
+                                print(f"{elemental_text}")
+                        else:
+                            hp = 0
+                    cur.execute("select boss from Player where discord_id = %s;", (ctx.message.author.id,))
+                    boss_name = cur.fetchone()
+                    cur.execute("select hp from Boss where boss  = %s;", (boss_name[0],))
+                    boss_hp = cur.fetchone()
+                    cur.execute("select count(*) from bossmoves where boss = %s;", (boss_name[0],))
+                    boss_attack_count = cur.fetchone()
+                    cur.execute("select move_name, damage, move_text, elemental_type, elemental_chance, elemental_timer, elemental_name, off_elemental_type, off_elemental_chance, off_elemental_timer, off_elemental_name, preskip, postskip from BossMoves where boss = %s;", (boss_name[0],))
+                    row = cur.fetchall()
+                    rng_boss_attack_count = random.randint(1, boss_attack_count[0])
+                    # print(rng_boss_attack_count)
+                    # print(row)
+                    r = row[rng_boss_attack_count-1]
+                    boss_move = r[0]
+                    boss_dmg = r[1]
+                    boss_text = r[2]
+                    boss_ele_type = r[3]
+                    boss_ele_chance = r[4]
+                    boss_ele_timer = r[5]
+                    boss_ele_text = r[6]
+                    boss_off_ele_type = r[7]
+                    boss_off_ele_chance = r[8]
+                    boss_off_ele_timer = r[9]
+                    boss_off_ele_text = r[10]
+                    boss_preskip = r[11]
+                    boss_postskip = r[12]
+                    
+                    #cur.execute("update Player_Gamestate set where discord_id = %s")
+                    print(f"Boss Move: {boss_move}")
                     print(dmg)
+                    print(boss_dmg)
                 #     #await ctx.send("<:gotojail:597850470060392448> Ali 1 ")
                 # elif args == "2":
                 #     await ctx.send("<:gotojail:597850470060392448> Ali 2")

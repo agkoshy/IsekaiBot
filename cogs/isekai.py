@@ -50,6 +50,51 @@ class Isekai(commands.Cog):
         conn.commit()
         conn.close()        
     @commands.command()
+    async def aq(self, ctx, args = None):
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        cur.execute("select count(*) from Player where discord_id = %s;", (ctx.message.author.id,))
+        rows = cur.fetchall()
+        player_exist = True
+        for r in rows:
+            if r[0] == 0:
+                player_exist = False
+        if player_exist == True:
+            if args is None:
+                await ctx.send("You need to add the quest number first")
+            else:
+
+                if int(args) >= 1 and int(args) <= 99:
+                    cur.execute("select boss_id, boss, hp, boss_race, exp_drop, lvl_req, descr from Boss where boss_id = %s", (args,))
+                    rows = cur.fetchone()
+                    boss_id = rows[0]
+                    boss = rows[1]
+                    hp = rows[2]
+                    boss_race = rows[3]
+                    exp_drop = rows[4]
+                    lvl_req = rows[5]
+                    descr = rows[6]
+
+                    cur.execute("select boss from Player where discord_id = %s;", (ctx.message.author.id,))
+                    r = cur.fetchone()
+                    if r[0] is None:
+                        cur.execute("update Player set boss = %s where discord_id = %s;", (boss, ctx.message.author.id))
+                        await ctx.send(f"Now fighting {boss}")
+                    else:
+                        cur.execute("update Player set boss = NULL;")
+                        await ctx.send("In progress of fighting another boss")
+                    # embed = discord.Embed(color=discord.Color.dark_green())
+                    # embed.add_field(name=f"Info on {boss}", value=f"**Boss Name:** {boss} **Boss HP:** {hp} \n**Boss Race:** {boss_race} \n\n **Description:** \n {descr}\n **Level Requirement:** {lvl_req}")
+                    # await ctx.message.channel.send(embed=embed)
+                else:
+                    await ctx.send("You need to add a valid number")
+        else:
+            await ctx.send("Sir you haven't !isekai yet")
+        cur.close()
+        conn.commit()
+        conn.close()        
+    @commands.command()
     async def quest(self, ctx):
         params = config()
         conn = psycopg2.connect(**params)
@@ -91,8 +136,7 @@ class Isekai(commands.Cog):
         if player_exist == True:
             await ctx.send('Your adventure has already started')
         else:
-            death_messages = ["You died of a heartattack after trying to \
-                save a girl from a tractor that was never going to hit her",
+            death_messages = ["You died of a heartattack after trying to save a girl from a tractor that was never going to hit her",
                 "You died after getting a visit from Truck-kun",
                 "You have been killed by Ali's giant ham",
                 "You are being summoned to a different world to save it from a crisis!",
@@ -107,6 +151,10 @@ class Isekai(commands.Cog):
                 \n\nYou will now be reincarnated into a fantasy world with Swords and Magic! \
                 \nHowever you will not get a cheat ability so do your best to survive!")            
             cur.execute("insert into player (discord_id, p_money, lvl, p_exp) values (%s, %s, %s, %s);", ((ctx.message.author.id,), 0, 1, 0))
+            cur.execute("insert into player_gear (discord_id) values (%s);", (ctx.message.author.id,))
+            cur.execute("insert into player_inventory (discord_id) values (%s);", (ctx.message.author.id,))
+            cur.execute("insert into player_moves (discord_id) values (%s);", (ctx.message.author.id,))
+            cur.execute("insert into player_stats (discord_id, str, intl, dex, vit, wis, eva, crit, acc, crit_multi) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", ((ctx.message.author.id,), 1, 1, 1, 1, 1, 10, 5, 70, 0))
             await ctx.send(embed=isekaiEmbed)
         cur.close()
         conn.commit()
