@@ -150,11 +150,11 @@ class Isekai(commands.Cog):
             isekaiEmbed.add_field(name = "Welcome to the Afterlife!", value=f"{random.choice(death_messages)}\
                 \n\nYou will now be reincarnated into a fantasy world with Swords and Magic! \
                 \nHowever you will not get a cheat ability so do your best to survive!")            
-            cur.execute("insert into player (discord_id, p_money, lvl, p_exp) values (%s, %s, %s, %s);", ((ctx.message.author.id,), 0, 1, 0))
-            cur.execute("insert into player_gear (discord_id) values (%s);", (ctx.message.author.id,))
-            cur.execute("insert into player_inventory (discord_id) values (%s);", (ctx.message.author.id,))
-            cur.execute("insert into player_moves (discord_id) values (%s);", (ctx.message.author.id,))
-            cur.execute("insert into player_stats (discord_id, str, intl, dex, vit, wis, eva, crit, acc, crit_multi) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", ((ctx.message.author.id,), 1, 1, 1, 1, 1, 10, 5, 70, 0))
+            cur.execute("insert into player (discord_id, gold, plvl, pexp, strh, dex, intl) values (%s, %s, %s, %s, %s, %s, %s);", ((ctx.message.author.id,), 0, 1, 0, 1, 1, 1))
+            # cur.execute("insert into player_gear (discord_id) values (%s);", (ctx.message.author.id,))
+            # cur.execute("insert into player_inventory (discord_id) values (%s);", (ctx.message.author.id,))
+            # cur.execute("insert into player_moves (discord_id) values (%s);", (ctx.message.author.id,))
+            # cur.execute("insert into player_stats (discord_id, str, intl, dex, vit, wis, eva, crit, acc, crit_multi) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", ((ctx.message.author.id,), 1, 1, 1, 1, 1, 10, 5, 70, 0))
             await ctx.send(embed=isekaiEmbed)
         cur.close()
         conn.commit()

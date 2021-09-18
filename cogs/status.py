@@ -1,3 +1,4 @@
+from helpers import Helpers
 import discord
 import psycopg2
 import random
@@ -98,17 +99,18 @@ class Status(commands.Cog):
                 id = r[0]
                 gold = r[1]
                 adv = r[2]
-                lvl = r[3]
-                p_exp = r[4]
-            cur.execute("select ex from Lvl where lvl = %s;", (lvl,))
-            r = cur.fetchone()
+                plvl = r[3]
+                pexp = r[4]
+            # cur.execute("select ex from Lvl where lvl = %s;", (lvl,))
+            # r = cur.fetchone()
             statusEmbed = discord.Embed(
                 colour = 1752220
             )
             in_adv = "Currently in dungeon"
             if adv is None:
                 in_adv = "Not in dungeon"
-            statusEmbed.add_field(name="Status", value=f"Name: {ctx.message.author.name}\nLevel: {lvl}\nExp: {p_exp}/{r[0]}\nGold: {gold}\nDungeon Status: {in_adv}")
+            helpers = Helpers()
+            statusEmbed.add_field(name="Status", value=f"Name: {ctx.message.author.name}\nLevel: {plvl}\nExp: {pexp}/{helpers.levelCalculator(plvl+1)}\nGold: {gold}\nDungeon Status: {in_adv}")
             print(ctx.message.author.avatar_url)
             statusEmbed.set_thumbnail(url=f"{ctx.message.author.avatar_url}")
             await ctx.send(embed=statusEmbed)
