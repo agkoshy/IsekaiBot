@@ -103,7 +103,7 @@ class Example(commands.Cog):
                 await ctx.send("You haven't started work to slack on")
             else:
                 #await ctx.send(f"You have worked hard asf for {now - d}")
-                rng = random.randint(1, 5)
+                rng = random.randint(1, 7)
                 if rng == 1:
                     await ctx.send(f"You have slacked for {now - d}")
                 elif rng == 2:
@@ -114,6 +114,10 @@ class Example(commands.Cog):
                     await ctx.send(f"You have played fgo for {now - d}")
                 elif (rng == 5):
                     await ctx.send(f"You have browsed pixiv for {now - d}")
+                elif (rng == 6):
+                    await ctx.send(f"You have played Genshin for {now - d}")
+                elif (rng == 7):
+                    await ctx.send(f"You have been fishing in Genshin for {now - d}")
         else:
             if (now < d):
                 await ctx.send("Fei hasn't started work to slack on")
@@ -130,6 +134,10 @@ class Example(commands.Cog):
                     await ctx.send(f"Fei has played fgo for {now - d}")
                 elif (rng == 5):
                     await ctx.send(f"Fei browsed pixiv for {now - d}")
+                elif (rng == 6):
+                    await ctx.send(f"Fei has played Genshin for {now - d}")
+                elif (rng == 7):
+                    await ctx.send(f"Fei has been fishing in Genshin for {now - d}")
       
         # await ctx.send('Humza is haram')
         # a = 32
